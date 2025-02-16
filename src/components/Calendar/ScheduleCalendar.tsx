@@ -3,6 +3,9 @@ import { Dayjs } from 'dayjs';
 import DateCell from './DateCell';
 import { useDateStore } from '../../stores/dateStore';
 import { formatDate } from '../../utils/formatDate';
+import { useQuery } from '@tanstack/react-query';
+import { getTodoData } from '../api/getTodoData';
+import { getAllToDos } from '../api/getAllToDos';
 
 type ListData = {
   id: number;
@@ -43,8 +46,23 @@ const listData: ListData[] = [
 function ScheduleCalendar() {
   const setSelectedDate = useDateStore((state) => state.setSelectedDate);
 
+  const { data } = useQuery({
+    queryKey: ['todos'],
+    queryFn: getAllToDos,
+  });
+
+  if (!data) return <></>;
+
   const cellRender: CalendarProps<Dayjs>['cellRender'] = (current, info) => {
-    const target = listData.find(
+    const scheduleData = data.map((item) => {
+      return {
+        id: item.data[0].id,
+        date: item.date,
+        schedule: [...item.data[0].contents],
+      };
+    });
+
+    const target = scheduleData.find(
       (item) => item.date === current.format('YYYY.MM.DD.ddd')
     );
 

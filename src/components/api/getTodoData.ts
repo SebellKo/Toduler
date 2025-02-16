@@ -42,7 +42,7 @@ export const getTodoData = async (date: string): Promise<Res> => {
       };
       return initialData;
     }
-    console.log(currentTodos);
+
     return currentTodos;
   } catch (error) {
     throw error;
