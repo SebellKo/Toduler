@@ -5,9 +5,10 @@ import { useState } from 'react';
 interface Props {
   title: string;
   isRequired: boolean;
+  handleClick: () => void;
 }
 
-function ToDoListHeader({ title, isRequired }: Props) {
+function ToDoListHeader({ title, isRequired, handleClick }: Props) {
   const [text, setText] = useState<string>(title);
   const [editedText, setEditedText] = useState<string>('');
   return (
@@ -23,7 +24,11 @@ function ToDoListHeader({ title, isRequired }: Props) {
       >
         {text}
       </Typography.Title>
-      <Button shape="circle" icon={<PlusCircleFilled />}></Button>
+      <Button
+        shape="circle"
+        icon={<PlusCircleFilled />}
+        onClick={handleClick}
+      ></Button>
     </Flex>
   );
 }

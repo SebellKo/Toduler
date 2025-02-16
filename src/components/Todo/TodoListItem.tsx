@@ -11,9 +11,10 @@ interface Props {
   listId: string;
   content: string;
   type: string;
+  done: boolean;
 }
 
-function TodoListItem({ id, listId, content, type }: Props) {
+function TodoListItem({ id, listId, content, type, done }: Props) {
   const [text, setText] = useState<string>(content);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
@@ -24,11 +25,13 @@ function TodoListItem({ id, listId, content, type }: Props) {
       id,
       content,
       targetId,
+      done,
     }: {
       id: string;
       content: string;
       targetId: string;
-    }) => editTodoListItem(id, content, targetId),
+      done: boolean;
+    }) => editTodoListItem(listId, content, targetId, done),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
@@ -37,7 +40,7 @@ function TodoListItem({ id, listId, content, type }: Props) {
   };
 
   const handleClickConfirm = (editedText: string) => {
-    mutate({ id: id, content: editedText, targetId: listId });
+    mutate({ id: listId, content: editedText, targetId: id, done: done });
     setText(editedText);
     setIsEditMode(false);
   };
@@ -53,7 +56,19 @@ function TodoListItem({ id, listId, content, type }: Props) {
       ) : (
         <>
           {type === 'todo' ? (
-            <Checkbox>{text}</Checkbox>
+            <Checkbox
+              checked={done}
+              onChange={(event) =>
+                mutate({
+                  id: listId,
+                  content: content,
+                  targetId: id,
+                  done: event.target.checked,
+                })
+              }
+            >
+              {text}
+            </Checkbox>
           ) : (
             <Typography.Paragraph style={{ margin: 0 }}>
               {text}

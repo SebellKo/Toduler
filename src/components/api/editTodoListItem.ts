@@ -6,11 +6,12 @@ import { v4 as uuidv4 } from 'uuid';
 const editTodoListItem = async (
   id: string,
   content: string,
-  targetId: string
+  targetId: string,
+  done: boolean
 ) => {
   try {
     const listStore = await getListStore('readwrite');
-    const nameIndex = listStore.index('name');
+    const nameIndex = listStore.index('id');
 
     const currentList = await getListById(id, nameIndex);
 
@@ -18,7 +19,7 @@ const editTodoListItem = async (
 
     const newContent = {
       id: uuidv4(),
-      done: false,
+      done: done,
       content: content,
     };
 
@@ -31,7 +32,7 @@ const editTodoListItem = async (
     await listStore.put(currentList, primaryKey);
     return { isDuplicated: false };
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 

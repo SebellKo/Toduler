@@ -51,6 +51,7 @@ function TodoList({ listData }: ListProps) {
             listId={listData.id}
             type={listData.type}
             content={item.content}
+            done={item.done}
           />
         )}
       ></List>
