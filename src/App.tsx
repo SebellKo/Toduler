@@ -1,25 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Calendar, Card, Flex } from 'antd';
+import { useState } from 'react';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+import Todo from './components/Todo/Todo';
+
+dayjs.locale('ko');
+
+const formatDate = (date: Dayjs) => {
+  return String(dayjs(date).format('YYYY.MM.DD.ddd'));
+};
 
 function App() {
+  const [selectedDate, setSelectedDate] = useState<string>(formatDate(dayjs()));
+
+  const handleSelectDate = (date: Dayjs) => {
+    const formattedDate = dayjs(date).format('YYYY.MM.DD.ddd');
+
+    setSelectedDate(formattedDate);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Flex gap="small">
+      <Card style={{ flex: 8 }}>
+        <Calendar onSelect={(date) => handleSelectDate(date)}></Calendar>
+      </Card>
+      <Todo selectedDate={selectedDate} />
+    </Flex>
   );
 }
 
