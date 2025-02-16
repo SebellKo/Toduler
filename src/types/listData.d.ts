@@ -1,5 +1,5 @@
 interface ContentData {
-  id: number;
+  id: string;
   done: boolean;
   content: string;
 }
@@ -10,7 +10,7 @@ interface SchduleContentData extends ContentData {
 
 export interface ListProps {
   listData: {
-    id: number;
+    id: string;
     title: string;
     type: string;
     required: boolean;

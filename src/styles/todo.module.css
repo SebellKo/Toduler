@@ -1,10 +1,18 @@
 .todo-card {
+  display: flex;
+  flex-direction: column;
   flex: 2;
   height: 100%;
   overflow: hidden;
 }
 
-.todo-card .ant-card-body {
-  height: 100%;
+.todo-card > :nth-child(2) {
+  flex: 8;
   overflow: scroll;
+}
+
+.todo-card > :nth-child(3) > :nth-child(1) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
