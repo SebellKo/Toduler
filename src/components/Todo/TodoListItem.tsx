@@ -2,7 +2,7 @@ import { EditOutlined } from '@ant-design/icons';
 import { Typography, Button, Checkbox } from 'antd';
 import ListItemContainer from '../../styles/components/ListItemContainer';
 import { useState } from 'react';
-import EditInput from '../commons/EditInput';
+import EditInput from './commons/EditInput';
 
 interface Props {
   content: string;
