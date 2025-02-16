@@ -1,20 +1,3 @@
-const initialData = [
-  {
-    id: 'schedules',
-    title: 'Schedules',
-    type: 'schedule',
-    required: true,
-    contents: [],
-  },
-  {
-    id: 'todos',
-    title: 'ToDos',
-    type: 'todo',
-    required: true,
-    contents: [],
-  },
-];
-
 const openDatabase = () => {
   return new Promise<IDBDatabase>((resolve, reject) => {
     const request = indexedDB.open('TODO', 1);
@@ -27,11 +10,7 @@ const openDatabase = () => {
         const listStore = db.createObjectStore('todoList', {
           autoIncrement: true,
         });
-        listStore.createIndex('id', 'id', { unique: false });
-
-        for (const item of initialData) {
-          listStore.add(item);
-        }
+        listStore.createIndex('id', 'date', { unique: false });
       }
     };
 

@@ -3,21 +3,35 @@ import {
   CheckOutlined,
   CloseOutlined,
 } from '@ant-design/icons';
-import { Button, Input, Flex } from 'antd';
+import { Button, Input, Flex, TimePicker } from 'antd';
 import { useState } from 'react';
 
 interface Props {
   text: string;
+  type: string;
+  handleClickDelete: () => void;
   handleClickConfirm: (value: string) => void;
   handleClickCancel: () => void;
 }
 
-function EditInput({ text, handleClickConfirm, handleClickCancel }: Props) {
+function EditInput({
+  text,
+  type,
+  handleClickDelete,
+  handleClickConfirm,
+  handleClickCancel,
+}: Props) {
   const [editedValue, setEditedValue] = useState<string>(text);
   return (
-    <>
+    <Flex>
       <Flex align="center" gap="small">
-        <Button type="text" danger icon={<DeleteOutlined />} />
+        <Button
+          type="text"
+          danger
+          icon={<DeleteOutlined />}
+          onClick={handleClickDelete}
+        />
+        {type === 'schedule' && <TimePicker></TimePicker>}
         <Input
           value={editedValue}
           onChange={(event) => setEditedValue(event.target.value)}
@@ -35,7 +49,7 @@ function EditInput({ text, handleClickConfirm, handleClickCancel }: Props) {
           onClick={handleClickCancel}
         ></Button>
       </Flex>
-    </>
+    </Flex>
   );
 }
 

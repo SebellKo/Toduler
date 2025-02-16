@@ -1,14 +1,11 @@
 import { getListById } from '../../utils/db/getListById';
 import { getListStore } from '../../utils/db/getListStore';
 import getPrimaryKey from '../../utils/db/getPrimaryKey';
-import { v4 as uuidv4 } from 'uuid';
 
-const editTodoListItem = async (
+export const deleteListItem = async (
   id: string,
   date: string,
-  content: string,
-  targetId: string,
-  done: boolean
+  targetId: string
 ) => {
   try {
     const listStore = await getListStore('readwrite');
@@ -18,27 +15,28 @@ const editTodoListItem = async (
 
     const primaryKey = await getPrimaryKey(date, nameIndex);
 
-    const newContent = {
-      id: uuidv4(),
-      done: done,
-      content: content,
-    };
-
     const currentDataIndex = currentList.data.findIndex(
       (item) => item.id === id
     );
-
     const currentContent = currentList.data[currentDataIndex];
-    const targetIndex = currentContent.contents.findIndex(
-      (item) => item.id === targetId
+
+    const updatedContent = currentContent.contents.filter(
+      (item) => item.id !== targetId
     );
 
-    currentList.data[currentDataIndex].contents[targetIndex] = newContent;
+    const updatedData = [...currentList.data];
+    updatedData[currentDataIndex] = {
+      ...updatedData[currentDataIndex],
+      contents: updatedContent,
+    };
 
-    await listStore.put(currentList, primaryKey);
+    const updatedList = {
+      date: currentList.date,
+      data: updatedData,
+    };
+
+    await listStore.put(updatedList, primaryKey);
   } catch (error) {
     throw error;
   }
 };
-
-export default editTodoListItem;

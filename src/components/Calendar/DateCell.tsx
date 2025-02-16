@@ -1,31 +1,21 @@
-import { Badge } from 'antd';
+import { Tag } from 'antd';
 import styles from '../../styles/schedule-calendar.module.css';
+import { ContentData } from '../../types/listData';
 
 interface Props {
-  id: number;
+  id: string;
   date: string;
-  done: number;
-  total: number;
-  schedule: {
-    id: number;
-    time: string;
-    content: string;
-  }[];
+  schedule: ContentData[];
 }
 
 function DateCell(item: Props) {
-  const { schedule, done, total } = item;
+  const { schedule } = item;
   return (
     <ul className={styles.events}>
-      <li>
-        <Badge
-          status={done === total ? 'success' : 'processing'}
-          text={`${done} of ${total} Completed`}
-        ></Badge>
-      </li>
       {schedule.map((item) => (
         <li key={item.id}>
-          <Badge status="error" text={item.content}></Badge>
+          <Tag color="magenta">{item.time}</Tag>
+          {item.content}
         </li>
       ))}
     </ul>

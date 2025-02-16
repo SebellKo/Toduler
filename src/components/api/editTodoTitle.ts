@@ -2,8 +2,11 @@ import { getListById } from '../../utils/db/getListById';
 import { getListStore } from '../../utils/db/getListStore';
 import getPrimaryKey from '../../utils/db/getPrimaryKey';
 
-export const editTodoTitle = async (id: string, newTitle: string) => {
-  console.log(newTitle);
+export const editTodoTitle = async (
+  id: string,
+  date: string,
+  newTitle: string
+) => {
   try {
     const listStore = await getListStore('readwrite');
     const nameIndex = listStore.index('id');
@@ -12,11 +15,14 @@ export const editTodoTitle = async (id: string, newTitle: string) => {
 
     const primaryKey = await getPrimaryKey(id, nameIndex);
 
-    currentList.title = newTitle;
+    const currentContentIndex = currentList.data.findIndex(
+      (item) => item.id === id
+    );
+
+    currentList.data[currentContentIndex].title = newTitle;
 
     await listStore.put(currentList, primaryKey);
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

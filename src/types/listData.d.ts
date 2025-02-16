@@ -2,10 +2,7 @@ interface ContentData {
   id: string;
   done: boolean;
   content: string;
-}
-
-interface SchduleContentData extends ContentData {
-  time: string;
+  time?: string;
 }
 
 export interface ListProps {
@@ -14,6 +11,6 @@ export interface ListProps {
     title: string;
     type: string;
     required: boolean;
-    contents: ContentData[] | SchduleContentData[];
+    contents: ContentData[];
   };
 }
