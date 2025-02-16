@@ -6,10 +6,13 @@ import 'dayjs/locale/ko';
 import Todo from './components/Todo/Todo';
 import { formatDate } from './utils/formatDate';
 import ScheduleCalendar from './components/Calendar/ScheduleCalendar';
-import openDatabase from './utils/openDatabase';
+import openDatabase from './utils/db/openDatabase';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 dayjs.locale('ko');
 openDatabase();
+
+const queryClient = new QueryClient();
 
 function App() {
   const [selectedDate, setSelectedDate] = useState<string>(formatDate(dayjs()));
@@ -21,10 +24,12 @@ function App() {
   };
 
   return (
-    <Flex gap="small" style={{ padding: '0 40px', height: '90%' }}>
-      <ScheduleCalendar handleSelectDate={handleSelectDate} />
-      <Todo selectedDate={selectedDate} />
-    </Flex>
+    <QueryClientProvider client={queryClient}>
+      <Flex gap="small" style={{ padding: '0 40px', height: '90%' }}>
+        <ScheduleCalendar handleSelectDate={handleSelectDate} />
+        <Todo selectedDate={selectedDate} />
+      </Flex>
+    </QueryClientProvider>
   );
 }
 

@@ -33,6 +33,7 @@ function TodoList({ listData }: ListProps) {
       <ToDoListHeader
         handleClick={handleClickAddButton}
         title={listData.title}
+        id={listData.id}
         isRequired={listData.required}
       />
       {isClickAdd && (

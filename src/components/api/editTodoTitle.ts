@@ -1,14 +1,9 @@
 import { getListById } from '../../utils/db/getListById';
 import { getListStore } from '../../utils/db/getListStore';
 import getPrimaryKey from '../../utils/db/getPrimaryKey';
-import { v4 as uuidv4 } from 'uuid';
 
-const editTodoListItem = async (
-  id: string,
-  content: string,
-  targetId: string,
-  done: boolean
-) => {
+export const editTodoTitle = async (id: string, newTitle: string) => {
+  console.log(newTitle);
   try {
     const listStore = await getListStore('readwrite');
     const nameIndex = listStore.index('id');
@@ -17,22 +12,11 @@ const editTodoListItem = async (
 
     const primaryKey = await getPrimaryKey(id, nameIndex);
 
-    const newContent = {
-      id: uuidv4(),
-      done: done,
-      content: content,
-    };
-
-    const targetIndex = currentList.contents.findIndex(
-      (commandItem) => commandItem.id === targetId
-    );
-
-    currentList.contents[targetIndex] = newContent;
+    currentList.title = newTitle;
 
     await listStore.put(currentList, primaryKey);
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
-
-export default editTodoListItem;
