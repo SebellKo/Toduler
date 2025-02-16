@@ -1,15 +1,15 @@
-import { Calendar, Card, Flex } from 'antd';
+import { Flex } from 'antd';
 import { useState } from 'react';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import Todo from './components/Todo/Todo';
+import { formatDate } from './utils/formatDate';
+import ScheduleCalendar from './components/Calendar/ScheduleCalendar';
+import openDatabase from './utils/openDatabase';
 
 dayjs.locale('ko');
-
-const formatDate = (date: Dayjs) => {
-  return String(dayjs(date).format('YYYY.MM.DD.ddd'));
-};
+openDatabase();
 
 function App() {
   const [selectedDate, setSelectedDate] = useState<string>(formatDate(dayjs()));
@@ -21,10 +21,8 @@ function App() {
   };
 
   return (
-    <Flex gap="small">
-      <Card style={{ flex: 8 }}>
-        <Calendar onSelect={(date) => handleSelectDate(date)}></Calendar>
-      </Card>
+    <Flex gap="small" style={{ padding: '0 40px', height: '90%' }}>
+      <ScheduleCalendar handleSelectDate={handleSelectDate} />
       <Todo selectedDate={selectedDate} />
     </Flex>
   );
