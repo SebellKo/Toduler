@@ -1,7 +1,6 @@
 import { PlusCircleFilled } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Flex, Typography, Button } from 'antd';
-import { useState } from 'react';
 import { editTodoTitle } from '../api/editTodoTitle';
 
 interface Props {
@@ -12,9 +11,6 @@ interface Props {
 }
 
 function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
-  const [text, setText] = useState<string>('');
-  const [editedText, setEditedText] = useState<string>('what');
-
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
