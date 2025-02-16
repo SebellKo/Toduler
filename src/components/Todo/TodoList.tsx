@@ -6,7 +6,10 @@ import TodoListItem from './TodoListItem';
 function TodoList({ listData }: ListProps) {
   return (
     <Flex vertical={true} gap="middle">
-      <ToDoListHeader title={listData.title}></ToDoListHeader>
+      <ToDoListHeader
+        title={listData.title}
+        isRequired={listData.required}
+      ></ToDoListHeader>
       <List
         itemLayout="horizontal"
         dataSource={listData.contents}
