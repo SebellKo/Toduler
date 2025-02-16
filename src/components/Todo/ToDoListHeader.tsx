@@ -12,7 +12,8 @@ interface Props {
 }
 
 function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
-  const [editedText, setEditedText] = useState<string>('');
+  const [text, setText] = useState<string>('');
+  const [editedText, setEditedText] = useState<string>('what');
 
   const queryClient = useQueryClient();
 
@@ -30,9 +31,9 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
           isRequired
             ? false
             : {
-                onChange: (value) => setEditedText(value),
-                onEnd: () => {
-                  mutate({ id: id, newTitle: editedText });
+                onChange: (value) => {
+                  if (value === title && value.trim().length === 0) return;
+                  mutate({ id: id, newTitle: value.trim() });
                 },
               }
         }
