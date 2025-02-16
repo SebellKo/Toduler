@@ -1,4 +1,4 @@
-import { ContentData, SchduleContentData } from '../../types/listData';
+import { ContentData } from '../../types/listData';
 import { getListStore } from '../../utils/db/getListStore';
 
 interface Res {
@@ -6,7 +6,7 @@ interface Res {
   title: string;
   type: string;
   required: boolean;
-  contents: ContentData[] | SchduleContentData[];
+  contents: ContentData[];
 }
 
 export const getTodoData = async (): Promise<Res[]> => {

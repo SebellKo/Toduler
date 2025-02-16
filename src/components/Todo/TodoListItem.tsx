@@ -13,9 +13,10 @@ interface Props {
   content: string;
   type: string;
   done: boolean;
+  time?: string;
 }
 
-function TodoListItem({ id, listId, content, type, done }: Props) {
+function TodoListItem({ id, listId, content, type, done, time }: Props) {
   const [text, setText] = useState<string>(content);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
@@ -84,7 +85,7 @@ function TodoListItem({ id, listId, content, type, done }: Props) {
             </Checkbox>
           ) : (
             <Flex gap="sm">
-              <Tag color="magenta">09:00</Tag>
+              <Tag color="magenta">{time}</Tag>
               <Typography.Paragraph style={{ margin: 0 }}>
                 {text}
               </Typography.Paragraph>

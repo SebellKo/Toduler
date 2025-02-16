@@ -1,11 +1,11 @@
-import { ContentData, SchduleContentData } from '../../types/listData';
+import { ContentData } from '../../types/listData';
 
 interface Res {
   id: string;
   title: string;
   type: string;
   required: boolean;
-  contents: ContentData[] | SchduleContentData[];
+  contents: ContentData[];
 }
 
 export const getListById = async (
