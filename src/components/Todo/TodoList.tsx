@@ -45,16 +45,19 @@ function TodoList({ listData }: ListProps) {
       <List
         itemLayout="horizontal"
         dataSource={listData.contents}
-        renderItem={(item) => (
-          <TodoListItem
-            key={item.id}
-            id={item.id}
-            listId={listData.id}
-            type={listData.type}
-            content={item.content}
-            done={item.done}
-          />
-        )}
+        renderItem={(item) => {
+          console.log(item.content);
+          return (
+            <TodoListItem
+              key={item.id}
+              id={item.id}
+              listId={listData.id}
+              type={listData.type}
+              content={item.content}
+              done={item.done}
+            />
+          );
+        }}
       ></List>
       <Divider />
     </Flex>

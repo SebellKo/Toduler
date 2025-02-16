@@ -1,5 +1,5 @@
 import { EditOutlined } from '@ant-design/icons';
-import { Typography, Button, Checkbox } from 'antd';
+import { Typography, Button, Checkbox, Flex, Tag } from 'antd';
 import ListItemContainer from '../../styles/components/ListItemContainer';
 import { useState } from 'react';
 import EditInput from './commons/EditInput';
@@ -61,6 +61,7 @@ function TodoListItem({ id, listId, content, type, done }: Props) {
       {isEditMode ? (
         <EditInput
           text={text}
+          type={type}
           handleClickDelete={handleClickDelete}
           handleClickConfirm={handleClickConfirm}
           handleClickCancel={handleClickCancel}
@@ -82,9 +83,12 @@ function TodoListItem({ id, listId, content, type, done }: Props) {
               {text}
             </Checkbox>
           ) : (
-            <Typography.Paragraph style={{ margin: 0 }}>
-              {text}
-            </Typography.Paragraph>
+            <Flex gap="sm">
+              <Tag color="magenta">09:00</Tag>
+              <Typography.Paragraph style={{ margin: 0 }}>
+                {text}
+              </Typography.Paragraph>
+            </Flex>
           )}
           <Button
             type="text"
