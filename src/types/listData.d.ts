@@ -1,5 +1,5 @@
 interface ContentData {
-  id: number;
+  id: string;
   done: boolean;
   content: string;
 }
