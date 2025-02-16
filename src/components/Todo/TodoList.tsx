@@ -1,7 +1,7 @@
 import { Flex, List, Divider } from 'antd';
 import ToDoListHeader from './ToDoListHeader';
 import { ListProps } from '../../types/listData';
-import ListItem from './ListItem';
+import TodoListItem from './TodoListItem';
 
 function TodoList({ listData }: ListProps) {
   return (
@@ -11,7 +11,7 @@ function TodoList({ listData }: ListProps) {
         itemLayout="horizontal"
         dataSource={listData.contents}
         renderItem={(item) => (
-          <ListItem type={listData.type} content={item.content} />
+          <TodoListItem type={listData.type} content={item.content} />
         )}
       ></List>
       <Divider />

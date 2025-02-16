@@ -9,7 +9,7 @@ interface Props {
   type: string;
 }
 
-function ListItem({ content, type }: Props) {
+function TodoListItem({ content, type }: Props) {
   const [text, setText] = useState<string>(content);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
@@ -50,4 +50,4 @@ function ListItem({ content, type }: Props) {
   );
 }
 
-export default ListItem;
+export default TodoListItem;

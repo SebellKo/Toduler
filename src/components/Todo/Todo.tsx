@@ -1,40 +1,38 @@
 import { Card } from 'antd';
 import TodoList from './TodoList';
-import ScheduleList from './ScheduleList';
 import styles from '../../styles/todo.module.css';
 
 interface Props {
   selectedDate: string;
 }
 
-const ScheduleData = {
-  id: 125,
-  title: 'Schedules',
-  type: 'schedule',
-  required: true,
-  contents: [
-    {
-      id: 3,
-      done: false,
-      time: '18:00',
-      content: 'Apple meeting',
-    },
-    {
-      id: 4,
-      done: false,
-      time: '19:00',
-      content: 'Pear meeting',
-    },
-    {
-      id: 5,
-      done: false,
-      time: '20:00',
-      content: 'Watermelon meeting',
-    },
-  ],
-};
-
 const TodoData = [
+  {
+    id: 125,
+    title: 'Schedules',
+    type: 'schedule',
+    required: true,
+    contents: [
+      {
+        id: 3,
+        done: false,
+        time: '18:00',
+        content: 'Apple meeting',
+      },
+      {
+        id: 4,
+        done: false,
+        time: '19:00',
+        content: 'Pear meeting',
+      },
+      {
+        id: 5,
+        done: false,
+        time: '20:00',
+        content: 'Watermelon meeting',
+      },
+    ],
+  },
   {
     id: 123,
     title: 'ToDos',
@@ -86,7 +84,6 @@ const TodoData = [
 function Todo({ selectedDate }: Props) {
   return (
     <Card title={selectedDate} className={styles['todo-card']}>
-      <ScheduleList listData={ScheduleData}></ScheduleList>;
       {TodoData.map((listItem) => (
         <TodoList key={listItem.id} listData={listItem}></TodoList>
       ))}
