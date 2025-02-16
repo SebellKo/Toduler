@@ -47,6 +47,8 @@ function TodoList({ listData }: ListProps) {
         renderItem={(item) => (
           <TodoListItem
             key={item.id}
+            id={item.id}
+            listId={listData.id}
             type={listData.type}
             content={item.content}
           />

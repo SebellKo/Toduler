@@ -3,21 +3,41 @@ import { Typography, Button, Checkbox } from 'antd';
 import ListItemContainer from '../../styles/components/ListItemContainer';
 import { useState } from 'react';
 import EditInput from './commons/EditInput';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import editTodoListItem from '../api/editTodoListItem';
 
 interface Props {
+  id: string;
+  listId: string;
   content: string;
   type: string;
 }
 
-function TodoListItem({ content, type }: Props) {
+function TodoListItem({ id, listId, content, type }: Props) {
   const [text, setText] = useState<string>(content);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: ({
+      id,
+      content,
+      targetId,
+    }: {
+      id: string;
+      content: string;
+      targetId: string;
+    }) => editTodoListItem(id, content, targetId),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+  });
 
   const handleClickCancel = () => {
     setIsEditMode(false);
   };
 
   const handleClickConfirm = (editedText: string) => {
+    mutate({ id: id, content: editedText, targetId: listId });
     setText(editedText);
     setIsEditMode(false);
   };
