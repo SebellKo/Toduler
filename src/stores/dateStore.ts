@@ -9,5 +9,5 @@ interface Store {
 
 export const useDateStore = create<Store>((set) => ({
   selectedDate: formatDate(dayjs()),
-  setSelectedDate: (newDate) => ({ selectedDate: newDate }),
+  setSelectedDate: (newDate) => set({ selectedDate: newDate }),
 }));
