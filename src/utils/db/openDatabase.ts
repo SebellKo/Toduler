@@ -27,6 +27,7 @@ const openDatabase = () => {
         const listStore = db.createObjectStore('todoList', {
           autoIncrement: true,
         });
+        listStore.createIndex('id', 'id', { unique: false });
 
         for (const item of initialData) {
           listStore.add(item);
