@@ -3,8 +3,9 @@ import TodoList from './TodoList';
 import styles from '../../styles/todo.module.css';
 import { useState } from 'react';
 import ListItemInput from './commons/ListItemInput';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getTodoData } from '../api/getTodoData';
+import { addTodoCategory } from '../api/addTodoCategory';
 
 interface Props {
   selectedDate: string;
@@ -12,8 +13,18 @@ interface Props {
 
 function Todo({ selectedDate }: Props) {
   const [isClickCreatNew, setIsClickCreateNew] = useState<boolean>(false);
-  const handleClickConfirm = () => {};
+  const handleClickConfirm = (title: string) => {
+    mutate(title);
+    setIsClickCreateNew(false);
+  };
   const handleClickCancel = () => setIsClickCreateNew(false);
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: (title: string) => addTodoCategory(title),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+  });
 
   const { data } = useQuery({
     queryKey: ['todos'],
@@ -21,8 +32,6 @@ function Todo({ selectedDate }: Props) {
   });
 
   if (!data) return <></>;
-
-  console.log(data);
 
   return (
     <Card
