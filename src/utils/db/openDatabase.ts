@@ -31,8 +31,6 @@ const openDatabase = () => {
         for (const item of initialData) {
           listStore.add(item);
         }
-
-        // listStore.createIndex('name', 'name', { unique: false });
       }
     };
 
