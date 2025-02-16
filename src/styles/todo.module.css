@@ -1,0 +1,10 @@
+.todo-card {
+  flex: 2;
+  height: 100%;
+  overflow: hidden;
+}
+
+.todo-card .ant-card-body {
+  height: 100%;
+  overflow: scroll;
+}
