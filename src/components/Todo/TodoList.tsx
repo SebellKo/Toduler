@@ -1,15 +1,18 @@
 import { Flex, List, Divider } from 'antd';
 import ToDoListHeader from './ToDoListHeader';
-import TodoListItem from './TodoListItem';
+import { ListProps } from '../../types/listData';
+import ListItem from './ListItem';
 
-function TodoList() {
+function TodoList({ listData }: ListProps) {
   return (
     <Flex vertical={true} gap="middle">
-      <ToDoListHeader></ToDoListHeader>
+      <ToDoListHeader title={listData.title}></ToDoListHeader>
       <List
         itemLayout="horizontal"
-        dataSource={['apple', 'pear', 'watermelon', 'banana']}
-        renderItem={(item) => <TodoListItem item={item}></TodoListItem>}
+        dataSource={listData.contents}
+        renderItem={(item) => (
+          <ListItem type={listData.type} content={item.content} />
+        )}
       ></List>
       <Divider />
     </Flex>
