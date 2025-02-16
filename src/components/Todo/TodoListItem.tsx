@@ -5,6 +5,7 @@ import { useState } from 'react';
 import EditInput from './commons/EditInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import editTodoListItem from '../api/editTodoListItem';
+import { deleteListItem } from '../api/deleteListItem';
 
 interface Props {
   id: string;
@@ -31,7 +32,13 @@ function TodoListItem({ id, listId, content, type, done }: Props) {
       content: string;
       targetId: string;
       done: boolean;
-    }) => editTodoListItem(listId, content, targetId, done),
+    }) => editTodoListItem(id, content, targetId, done),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+  });
+
+  const { mutate: deleteMutate } = useMutation({
+    mutationFn: ({ id, targetId }: { id: string; targetId: string }) =>
+      deleteListItem(id, targetId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
@@ -45,11 +52,16 @@ function TodoListItem({ id, listId, content, type, done }: Props) {
     setIsEditMode(false);
   };
 
+  const handleClickDelete = () => {
+    deleteMutate({ id: listId, targetId: id });
+  };
+
   return (
     <ListItemContainer>
       {isEditMode ? (
         <EditInput
           text={text}
+          handleClickDelete={handleClickDelete}
           handleClickConfirm={handleClickConfirm}
           handleClickCancel={handleClickCancel}
         />

@@ -8,16 +8,27 @@ import { useState } from 'react';
 
 interface Props {
   text: string;
+  handleClickDelete: () => void;
   handleClickConfirm: (value: string) => void;
   handleClickCancel: () => void;
 }
 
-function EditInput({ text, handleClickConfirm, handleClickCancel }: Props) {
+function EditInput({
+  text,
+  handleClickDelete,
+  handleClickConfirm,
+  handleClickCancel,
+}: Props) {
   const [editedValue, setEditedValue] = useState<string>(text);
   return (
     <>
       <Flex align="center" gap="small">
-        <Button type="text" danger icon={<DeleteOutlined />} />
+        <Button
+          type="text"
+          danger
+          icon={<DeleteOutlined />}
+          onClick={handleClickDelete}
+        />
         <Input
           value={editedValue}
           onChange={(event) => setEditedValue(event.target.value)}

@@ -12,7 +12,7 @@ function TodoList({ listData }: ListProps) {
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate: editMutate } = useMutation({
     mutationFn: ({ id, content }: { id: string; content: string }) =>
       addTodoListItem(id, content),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
@@ -20,7 +20,7 @@ function TodoList({ listData }: ListProps) {
 
   const handleClickConfirm = (content: string) => {
     setIsClickAdd(false);
-    mutate({ id: listData.id, content: content });
+    editMutate({ id: listData.id, content: content });
   };
   const handleClickCancel = () => {
     setIsClickAdd(false);
