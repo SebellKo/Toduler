@@ -1,19 +1,22 @@
 import { ContentData } from '../../types/listData';
 
 interface Res {
-  id: string;
-  title: string;
-  type: string;
-  required: boolean;
-  contents: ContentData[];
+  date: string;
+  data: {
+    id: string;
+    title: string;
+    type: string;
+    required: boolean;
+    contents: ContentData[];
+  }[];
 }
 
 export const getListById = async (
-  id: string,
+  date: string,
   nameIndex: IDBIndex
 ): Promise<Res> => {
   return new Promise((resolve, reject) => {
-    const getCurrentListRequest = nameIndex.get(id);
+    const getCurrentListRequest = nameIndex.get(date);
 
     getCurrentListRequest.onsuccess = (event) => {
       if (!event.target) return;

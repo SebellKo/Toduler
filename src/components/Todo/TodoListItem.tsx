@@ -6,6 +6,7 @@ import EditInput from './commons/EditInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import editTodoListItem from '../api/editTodoListItem';
 import { deleteListItem } from '../api/deleteListItem';
+import { useDateStore } from '../../stores/dateStore';
 
 interface Props {
   id: string;
@@ -19,27 +20,37 @@ interface Props {
 function TodoListItem({ id, listId, content, type, done, time }: Props) {
   const [text, setText] = useState<string>(content);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const selectedDate = useDateStore((state) => state.selectedDate);
 
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: ({
       id,
+      date,
       content,
       targetId,
       done,
     }: {
       id: string;
+      date: string;
       content: string;
       targetId: string;
       done: boolean;
-    }) => editTodoListItem(id, content, targetId, done),
+    }) => editTodoListItem(id, date, content, targetId, done),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
   const { mutate: deleteMutate } = useMutation({
-    mutationFn: ({ id, targetId }: { id: string; targetId: string }) =>
-      deleteListItem(id, targetId),
+    mutationFn: ({
+      id,
+      date,
+      targetId,
+    }: {
+      id: string;
+      date: string;
+      targetId: string;
+    }) => deleteListItem(id, date, targetId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
@@ -48,13 +59,19 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
   };
 
   const handleClickConfirm = (editedText: string) => {
-    mutate({ id: listId, content: editedText, targetId: id, done: done });
+    mutate({
+      id: listId,
+      date: selectedDate,
+      content: editedText,
+      targetId: id,
+      done: done,
+    });
     setText(editedText);
     setIsEditMode(false);
   };
 
   const handleClickDelete = () => {
-    deleteMutate({ id: listId, targetId: id });
+    deleteMutate({ id: listId, date: selectedDate, targetId: id });
   };
 
   return (
@@ -75,6 +92,7 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
               onChange={(event) =>
                 mutate({
                   id: listId,
+                  date: selectedDate,
                   content: content,
                   targetId: id,
                   done: event.target.checked,

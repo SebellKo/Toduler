@@ -4,17 +4,16 @@ import styles from '../../styles/todo.module.css';
 import { useState } from 'react';
 import ListItemInput from './commons/ListItemInput';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getTodoData } from '../api/getTodoData';
 import { addTodoCategory } from '../api/addTodoCategory';
+import { getTodoData } from '../api/getTodoData';
+import { useDateStore } from '../../stores/dateStore';
 
-interface Props {
-  selectedDate: string;
-}
-
-function Todo({ selectedDate }: Props) {
+function Todo() {
   const [isClickCreatNew, setIsClickCreateNew] = useState<boolean>(false);
+  const selectedDate = useDateStore((state) => state.selectedDate);
+
   const handleClickConfirm = (title: string) => {
-    mutate(title);
+    mutate({ title: title, date: selectedDate });
     setIsClickCreateNew(false);
   };
   const handleClickCancel = () => setIsClickCreateNew(false);
@@ -22,13 +21,14 @@ function Todo({ selectedDate }: Props) {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: (title: string) => addTodoCategory(title),
+    mutationFn: ({ title, date }: { title: string; date: string }) =>
+      addTodoCategory(title, date),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
   const { data } = useQuery({
-    queryKey: ['todos'],
-    queryFn: getTodoData,
+    queryKey: ['todos', selectedDate],
+    queryFn: () => getTodoData(selectedDate),
   });
 
   if (!data) return <></>;
@@ -52,7 +52,7 @@ function Todo({ selectedDate }: Props) {
       }
       className={styles['todo-card']}
     >
-      {data.map((listData) => {
+      {data.data.map((listData) => {
         return <TodoList key={listData.id} listData={listData}></TodoList>;
       })}
     </Card>

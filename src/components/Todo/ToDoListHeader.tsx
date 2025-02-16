@@ -4,6 +4,7 @@ import { Flex, Typography, Button } from 'antd';
 import { editTodoTitle } from '../api/editTodoTitle';
 import { useState } from 'react';
 import { deleteList } from '../api/deleteList';
+import { useDateStore } from '../../stores/dateStore';
 
 interface Props {
   id: string;
@@ -14,17 +15,25 @@ interface Props {
 
 function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const selectedDate = useDateStore((state) => state.selectedDate);
 
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: ({ id, newTitle }: { id: string; newTitle: string }) =>
-      editTodoTitle(id, newTitle),
+    mutationFn: ({
+      id,
+      date,
+      newTitle,
+    }: {
+      id: string;
+      date: string;
+      newTitle: string;
+    }) => editTodoTitle(id, date, newTitle),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
   const { mutate: deleteListMutate } = useMutation({
-    mutationFn: (id: string) => deleteList(id),
+    mutationFn: (date: string) => deleteList(date),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
@@ -39,7 +48,11 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
                 onChange: (value) => {
                   if (value === title && value.trim().length === 0) return;
                   setIsEditMode(false);
-                  mutate({ id: id, newTitle: value.trim() });
+                  mutate({
+                    id: id,
+                    date: selectedDate,
+                    newTitle: value.trim(),
+                  });
                 },
                 onStart: () => setIsEditMode(true),
               }
@@ -53,7 +66,7 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
           type="text"
           danger
           icon={<DeleteOutlined />}
-          onMouseDown={() => deleteListMutate(id)}
+          onMouseDown={() => deleteListMutate(selectedDate)}
         />
       ) : (
         <Button

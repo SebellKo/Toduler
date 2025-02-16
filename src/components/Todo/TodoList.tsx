@@ -7,24 +7,27 @@ import ListItemInput from './commons/ListItemInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import addTodoListItem from '../api/addTodoListItem';
 import dayjs from 'dayjs';
+import { useDateStore } from '../../stores/dateStore';
 
 function TodoList({ listData }: ListProps) {
-  console.log(listData.contents);
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
   const [selectedTime, setSelectedTime] = useState<string>('');
+  const selectedDate = useDateStore((state) => state.selectedDate);
 
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: ({
       id,
+      date,
       content,
       time,
     }: {
       id: string;
+      date: string;
       content: string;
       time?: string;
-    }) => addTodoListItem(id, content, time),
+    }) => addTodoListItem(id, date, content, time),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
@@ -32,8 +35,13 @@ function TodoList({ listData }: ListProps) {
     setIsClickAdd(false);
     const mutateObj =
       listData.type === 'todo'
-        ? { id: listData.id, content: content }
-        : { id: listData.id, content: content, time: selectedTime };
+        ? { id: listData.id, date: selectedDate, content: content }
+        : {
+            id: listData.id,
+            date: selectedDate,
+            content: content,
+            time: selectedTime,
+          };
     mutate(mutateObj);
   };
   const handleClickCancel = () => {
