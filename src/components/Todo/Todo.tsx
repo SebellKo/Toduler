@@ -4,8 +4,8 @@ import styles from '../../styles/todo.module.css';
 import { useState } from 'react';
 import ListItemInput from './commons/ListItemInput';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addTodoCategory } from '../api/addTodoCategory';
-import { getTodoData } from '../api/getTodoData';
+import { addTodoCategory } from '../../api/addTodoCategory';
+import { getTodoData } from '../../api/getTodoData';
 import { useDateStore } from '../../stores/dateStore';
 
 function Todo() {

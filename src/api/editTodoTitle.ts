@@ -1,6 +1,6 @@
-import { getListById } from '../../utils/db/getListById';
-import { getListStore } from '../../utils/db/getListStore';
-import getPrimaryKey from '../../utils/db/getPrimaryKey';
+import { getListById } from '../utils/db/getListById';
+import { getListStore } from '../utils/db/getListStore';
+import getPrimaryKey from '../utils/db/getPrimaryKey';
 
 export const editTodoTitle = async (
   id: string,

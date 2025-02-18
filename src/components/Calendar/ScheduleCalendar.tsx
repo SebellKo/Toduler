@@ -4,7 +4,7 @@ import DateCell from './DateCell';
 import { useDateStore } from '../../stores/dateStore';
 import { formatDate } from '../../utils/formatDate';
 import { useQuery } from '@tanstack/react-query';
-import { getAllToDos } from '../api/getAllToDos';
+import { getAllToDos } from '../../api/getAllToDos';
 
 function ScheduleCalendar() {
   const setSelectedDate = useDateStore((state) => state.setSelectedDate);

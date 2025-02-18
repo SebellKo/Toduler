@@ -1,6 +1,6 @@
-import { getListById } from '../../utils/db/getListById';
-import { getListStore } from '../../utils/db/getListStore';
-import getPrimaryKey from '../../utils/db/getPrimaryKey';
+import { getListById } from '../utils/db/getListById';
+import { getListStore } from '../utils/db/getListStore';
+import getPrimaryKey from '../utils/db/getPrimaryKey';
 import { v4 as uuidv4 } from 'uuid';
 
 const editTodoListItem = async (

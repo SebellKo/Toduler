@@ -4,8 +4,8 @@ import ListItemContainer from '../../styles/components/ListItemContainer';
 import { useState } from 'react';
 import EditInput from './commons/EditInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import editTodoListItem from '../api/editTodoListItem';
-import { deleteListItem } from '../api/deleteListItem';
+import editTodoListItem from '../../api/editTodoListItem';
+import { deleteListItem } from '../../api/deleteListItem';
 import { useDateStore } from '../../stores/dateStore';
 
 interface Props {
@@ -80,6 +80,7 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
         <EditInput
           text={text}
           type={type}
+          time={time}
           handleClickDelete={handleClickDelete}
           handleClickConfirm={handleClickConfirm}
           handleClickCancel={handleClickCancel}

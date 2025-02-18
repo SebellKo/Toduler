@@ -9,6 +9,7 @@ import { useState } from 'react';
 interface Props {
   text: string;
   type: string;
+  time?: string;
   handleClickDelete: () => void;
   handleClickConfirm: (value: string) => void;
   handleClickCancel: () => void;
@@ -17,6 +18,7 @@ interface Props {
 function EditInput({
   text,
   type,
+  time,
   handleClickDelete,
   handleClickConfirm,
   handleClickCancel,

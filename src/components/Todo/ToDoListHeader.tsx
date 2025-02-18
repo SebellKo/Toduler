@@ -1,9 +1,9 @@
 import { DeleteOutlined, PlusCircleFilled } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Flex, Typography, Button } from 'antd';
-import { editTodoTitle } from '../api/editTodoTitle';
+import { editTodoTitle } from '../../api/editTodoTitle';
 import { useState } from 'react';
-import { deleteList } from '../api/deleteList';
+import { deleteList } from '../../api/deleteList';
 import { useDateStore } from '../../stores/dateStore';
 
 interface Props {
@@ -47,12 +47,12 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
             : {
                 onChange: (value) => {
                   if (value === title && value.trim().length === 0) return;
-                  setIsEditMode(false);
                   mutate({
                     id: id,
                     date: selectedDate,
                     newTitle: value.trim(),
                   });
+                  setIsEditMode(false);
                 },
                 onStart: () => setIsEditMode(true),
               }
