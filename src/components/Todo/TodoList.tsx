@@ -9,7 +9,11 @@ import addTodoListItem from '../../api/addTodoListItem';
 import dayjs from 'dayjs';
 import { useDateStore } from '../../stores/dateStore';
 
-function TodoList({ listData }: ListProps) {
+interface Props {
+  listData: ListProps;
+}
+
+function TodoList({ listData }: Props) {
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
   const [selectedTime, setSelectedTime] = useState<string>('');
   const selectedDate = useDateStore((state) => state.selectedDate);

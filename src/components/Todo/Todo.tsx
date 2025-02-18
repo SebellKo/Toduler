@@ -5,17 +5,26 @@ import { useState } from 'react';
 import ListItemInput from './commons/ListItemInput';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { addTodoCategory } from '../../api/addTodoCategory';
-import { getTodoData } from '../../api/getTodoData';
 import { useDateStore } from '../../stores/dateStore';
+import { createInitialList } from '../../utils/createInitialList';
+import { getAllToDos } from '../../api/getAllToDos';
 
 function Todo() {
   const [isClickCreatNew, setIsClickCreateNew] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
+  const filteredDate = selectedDate.slice(0, 7);
+
+  const { data: todoData } = useQuery({
+    queryKey: ['todos', filteredDate],
+    queryFn: () => getAllToDos(filteredDate),
+    select: (data) => data.find((item) => item.date === selectedDate),
+  });
 
   const handleClickConfirm = (title: string) => {
     mutate({ title: title, date: selectedDate });
     setIsClickCreateNew(false);
   };
+
   const handleClickCancel = () => setIsClickCreateNew(false);
 
   const queryClient = useQueryClient();
@@ -26,12 +35,7 @@ function Todo() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
-  const { data } = useQuery({
-    queryKey: ['todos', selectedDate],
-    queryFn: () => getTodoData(selectedDate),
-  });
-
-  if (!data) return <></>;
+  if (!todoData) return <></>;
 
   return (
     <Card
@@ -52,9 +56,13 @@ function Todo() {
       }
       className={styles['todo-card']}
     >
-      {data.data.map((listData) => {
-        return <TodoList key={listData.id} listData={listData}></TodoList>;
-      })}
+      {todoData
+        ? todoData.data.map((item) => (
+            <TodoList key={item.id} listData={item}></TodoList>
+          ))
+        : createInitialList(selectedDate).data.map((item) => (
+            <TodoList key={item.id} listData={item}></TodoList>
+          ))}
     </Card>
   );
 }
