@@ -54,7 +54,6 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
           isRequired
             ? false
             : {
-                text: title,
                 onChange: (value) => {
                   setText(value);
                   setIsEditMode(false);
