@@ -7,17 +7,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { addTodoCategory } from '../../api/addTodoCategory';
 import { useDateStore } from '../../stores/dateStore';
 import { createInitialList } from '../../utils/createInitialList';
-import { getAllToDos } from '../../api/getAllToDos';
+import { getTodoData } from '../../api/getTodoData';
 
 function Todo() {
   const [isClickCreatNew, setIsClickCreateNew] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
-  const filteredDate = selectedDate.slice(0, 7);
 
   const { data: todoData } = useQuery({
-    queryKey: ['todos', filteredDate],
-    queryFn: () => getAllToDos(filteredDate),
-    select: (data) => data.find((item) => item.date === selectedDate),
+    queryKey: ['todos', selectedDate],
+    queryFn: () => getTodoData(selectedDate),
   });
 
   const handleClickConfirm = (title: string) => {
@@ -32,10 +30,9 @@ function Todo() {
   const { mutate } = useMutation({
     mutationFn: ({ title, date }: { title: string; date: string }) =>
       addTodoCategory(title, date),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['todos', selectedDate] }),
   });
-
-  if (!todoData) return <></>;
 
   return (
     <Card

@@ -7,13 +7,14 @@ export const editTodoTitle = async (
   date: string,
   newTitle: string
 ) => {
+  console.log(newTitle);
   try {
     const listStore = await getListStore('readwrite');
     const nameIndex = listStore.index('id');
 
-    const currentList = await getListById(id, nameIndex);
+    const currentList = await getListById(date, nameIndex);
 
-    const primaryKey = await getPrimaryKey(id, nameIndex);
+    const primaryKey = await getPrimaryKey(date, nameIndex);
 
     const currentContentIndex = currentList.data.findIndex(
       (item) => item.id === id
