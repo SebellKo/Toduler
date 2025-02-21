@@ -8,7 +8,8 @@ const editTodoListItem = async (
   date: string,
   content: string,
   targetId: string,
-  done: boolean
+  done: boolean,
+  time?: string
 ) => {
   try {
     const listStore = await getListStore('readwrite');
@@ -18,11 +19,13 @@ const editTodoListItem = async (
 
     const primaryKey = await getPrimaryKey(date, nameIndex);
 
-    const newContent = {
-      id: uuidv4(),
-      done: done,
-      content: content,
-    };
+    const newContent = time
+      ? { id: uuidv4(), done: done, content: content, time: time }
+      : {
+          id: uuidv4(),
+          done: done,
+          content: content,
+        };
 
     const currentDataIndex = currentList.data.findIndex(
       (item) => item.id === id
