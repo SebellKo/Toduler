@@ -7,7 +7,6 @@ export const editTodoTitle = async (
   date: string,
   newTitle: string
 ) => {
-  console.log(newTitle);
   try {
     const listStore = await getListStore('readwrite');
     const nameIndex = listStore.index('id');

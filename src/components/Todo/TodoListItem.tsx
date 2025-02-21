@@ -31,13 +31,15 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
       content,
       targetId,
       done,
+      time,
     }: {
       id: string;
       date: string;
       content: string;
       targetId: string;
       done: boolean;
-    }) => editTodoListItem(id, date, content, targetId, done),
+      time?: string;
+    }) => editTodoListItem(id, date, content, targetId, done, time),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
@@ -58,15 +60,33 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
     setIsEditMode(false);
   };
 
-  const handleClickConfirm = (editedText: string) => {
-    mutate({
-      id: listId,
-      date: selectedDate,
-      content: editedText,
-      targetId: id,
-      done: done,
-    });
-    setText(editedText);
+  const handleClickConfirm = ({
+    text,
+    time,
+  }: {
+    text: string;
+    time?: string;
+  }) => {
+    console.log(time);
+    const req = time
+      ? {
+          id: listId,
+          date: selectedDate,
+          content: text,
+          targetId: id,
+          done: done,
+          time: time,
+        }
+      : {
+          id: listId,
+          date: selectedDate,
+          content: text,
+          targetId: id,
+          done: done,
+        };
+
+    mutate(req);
+    setText(text);
     setIsEditMode(false);
   };
 
