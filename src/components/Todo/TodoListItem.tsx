@@ -67,7 +67,6 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
     text: string;
     time?: string;
   }) => {
-    console.log(time);
     const req = time
       ? {
           id: listId,
@@ -119,6 +118,7 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
                   done: event.target.checked,
                 })
               }
+              style={{ textDecoration: `${done ? 'line-through' : 'none'}` }}
             >
               {text}
             </Checkbox>
