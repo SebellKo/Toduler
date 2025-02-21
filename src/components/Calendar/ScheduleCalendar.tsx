@@ -5,8 +5,10 @@ import { useDateStore } from '../../stores/dateStore';
 import { formatDate } from '../../utils/formatDate';
 import { useQuery } from '@tanstack/react-query';
 import { getAllToDos } from '../../api/getAllToDos';
+import { useSort } from '../../hooks/useSort';
 
 function ScheduleCalendar() {
+  const { sortContents } = useSort();
   const { selectedDate, setSelectedDate } = useDateStore();
   const filteredDate = selectedDate.slice(0, 7);
 
@@ -22,7 +24,7 @@ function ScheduleCalendar() {
       return {
         id: item.data[0].id,
         date: item.date,
-        schedule: [...item.data[0].contents],
+        schedule: [...sortContents(item.data[0].contents)],
       };
     });
 

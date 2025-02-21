@@ -8,14 +8,21 @@ import { addTodoCategory } from '../../api/addTodoCategory';
 import { useDateStore } from '../../stores/dateStore';
 import { createInitialList } from '../../utils/createInitialList';
 import { getTodoData } from '../../api/getTodoData';
+import { useSort } from '../../hooks/useSort';
 
 function Todo() {
+  const { sortContents } = useSort();
   const [isClickCreatNew, setIsClickCreateNew] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
 
   const { data: todoData } = useQuery({
     queryKey: ['todos', selectedDate],
     queryFn: () => getTodoData(selectedDate),
+    select: (data) => {
+      if (!data.data[0]) return data;
+      data.data[0].contents = sortContents(data.data[0].contents);
+      return data;
+    },
   });
 
   const handleClickConfirm = (title: string) => {
