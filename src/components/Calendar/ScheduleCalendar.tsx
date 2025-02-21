@@ -36,12 +36,11 @@ function ScheduleCalendar() {
   };
 
   return (
-    <Card style={{ flex: 8 }}>
-      <Calendar
-        cellRender={cellRender}
-        onSelect={(date) => setSelectedDate(formatDate(date))}
-      ></Calendar>
-    </Card>
+    <Calendar
+      cellRender={cellRender}
+      onSelect={(date) => setSelectedDate(formatDate(date))}
+      style={{ flex: 8 }}
+    ></Calendar>
   );
 }
 

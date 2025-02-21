@@ -123,7 +123,7 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
               {text}
             </Checkbox>
           ) : (
-            <Flex gap="sm">
+            <Flex gap="sm" align="center" flex={1}>
               <Tag color="magenta">{time}</Tag>
               <Typography.Paragraph style={{ margin: 0 }}>
                 {text}
