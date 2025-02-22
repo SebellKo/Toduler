@@ -1,6 +1,6 @@
-import { ContentData } from '../../types/listData';
-import { getListById } from '../../utils/db/getListById';
-import { getListStore } from '../../utils/db/getListStore';
+import { ContentData } from '../types/listData';
+import { getListById } from '../utils/db/getListById';
+import { getListStore } from '../utils/db/getListStore';
 
 interface Res {
   date: string;

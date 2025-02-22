@@ -1,6 +1,6 @@
-import { getListById } from '../../utils/db/getListById';
-import { getListStore } from '../../utils/db/getListStore';
-import getPrimaryKey from '../../utils/db/getPrimaryKey';
+import { getListById } from '../utils/db/getListById';
+import { getListStore } from '../utils/db/getListStore';
+import getPrimaryKey from '../utils/db/getPrimaryKey';
 
 export const editTodoTitle = async (
   id: string,
@@ -11,9 +11,9 @@ export const editTodoTitle = async (
     const listStore = await getListStore('readwrite');
     const nameIndex = listStore.index('id');
 
-    const currentList = await getListById(id, nameIndex);
+    const currentList = await getListById(date, nameIndex);
 
-    const primaryKey = await getPrimaryKey(id, nameIndex);
+    const primaryKey = await getPrimaryKey(date, nameIndex);
 
     const currentContentIndex = currentList.data.findIndex(
       (item) => item.id === id

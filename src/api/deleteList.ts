@@ -1,5 +1,5 @@
-import { getListStore } from '../../utils/db/getListStore';
-import getPrimaryKey from '../../utils/db/getPrimaryKey';
+import { getListStore } from '../utils/db/getListStore';
+import getPrimaryKey from '../utils/db/getPrimaryKey';
 
 export const deleteList = async (date: string) => {
   try {

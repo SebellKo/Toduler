@@ -1,9 +1,9 @@
 import { DeleteOutlined, PlusCircleFilled } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Flex, Typography, Button } from 'antd';
-import { editTodoTitle } from '../api/editTodoTitle';
-import { useState } from 'react';
-import { deleteList } from '../api/deleteList';
+import { editTodoTitle } from '../../api/editTodoTitle';
+import { useEffect, useState } from 'react';
+import { deleteList } from '../../api/deleteList';
 import { useDateStore } from '../../stores/dateStore';
 
 interface Props {
@@ -14,10 +14,19 @@ interface Props {
 }
 
 function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
+  const [text, setText] = useState<string>(title);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
-
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (text === title && text.trim().length === 0) return;
+    mutate({
+      id: id,
+      date: selectedDate,
+      newTitle: text.trim(),
+    });
+  }, [text]);
 
   const { mutate } = useMutation({
     mutationFn: ({
@@ -46,20 +55,15 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
             ? false
             : {
                 onChange: (value) => {
-                  if (value === title && value.trim().length === 0) return;
+                  setText(value);
                   setIsEditMode(false);
-                  mutate({
-                    id: id,
-                    date: selectedDate,
-                    newTitle: value.trim(),
-                  });
                 },
                 onStart: () => setIsEditMode(true),
               }
         }
         style={{ margin: 0 }}
       >
-        {title}
+        {text}
       </Typography.Title>
       {isEditMode ? (
         <Button

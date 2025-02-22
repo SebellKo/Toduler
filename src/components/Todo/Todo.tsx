@@ -4,18 +4,32 @@ import styles from '../../styles/todo.module.css';
 import { useState } from 'react';
 import ListItemInput from './commons/ListItemInput';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addTodoCategory } from '../api/addTodoCategory';
-import { getTodoData } from '../api/getTodoData';
+import { addTodoCategory } from '../../api/addTodoCategory';
 import { useDateStore } from '../../stores/dateStore';
+import { createInitialList } from '../../utils/createInitialList';
+import { getTodoData } from '../../api/getTodoData';
+import { useSort } from '../../hooks/useSort';
 
 function Todo() {
+  const { sortContents } = useSort();
   const [isClickCreatNew, setIsClickCreateNew] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
+
+  const { data: todoData } = useQuery({
+    queryKey: ['todos', selectedDate],
+    queryFn: () => getTodoData(selectedDate),
+    select: (data) => {
+      if (!data.data[0]) return data;
+      data.data[0].contents = sortContents(data.data[0].contents);
+      return data;
+    },
+  });
 
   const handleClickConfirm = (title: string) => {
     mutate({ title: title, date: selectedDate });
     setIsClickCreateNew(false);
   };
+
   const handleClickCancel = () => setIsClickCreateNew(false);
 
   const queryClient = useQueryClient();
@@ -23,15 +37,9 @@ function Todo() {
   const { mutate } = useMutation({
     mutationFn: ({ title, date }: { title: string; date: string }) =>
       addTodoCategory(title, date),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['todos', selectedDate] }),
   });
-
-  const { data } = useQuery({
-    queryKey: ['todos', selectedDate],
-    queryFn: () => getTodoData(selectedDate),
-  });
-
-  if (!data) return <></>;
 
   return (
     <Card
@@ -52,9 +60,13 @@ function Todo() {
       }
       className={styles['todo-card']}
     >
-      {data.data.map((listData) => {
-        return <TodoList key={listData.id} listData={listData}></TodoList>;
-      })}
+      {todoData
+        ? todoData.data.map((item) => (
+            <TodoList key={item.id} listData={item}></TodoList>
+          ))
+        : createInitialList(selectedDate).data.map((item) => (
+            <TodoList key={item.id} listData={item}></TodoList>
+          ))}
     </Card>
   );
 }

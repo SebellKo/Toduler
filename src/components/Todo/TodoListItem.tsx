@@ -4,8 +4,8 @@ import ListItemContainer from '../../styles/components/ListItemContainer';
 import { useState } from 'react';
 import EditInput from './commons/EditInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import editTodoListItem from '../api/editTodoListItem';
-import { deleteListItem } from '../api/deleteListItem';
+import editTodoListItem from '../../api/editTodoListItem';
+import { deleteListItem } from '../../api/deleteListItem';
 import { useDateStore } from '../../stores/dateStore';
 
 interface Props {
@@ -31,13 +31,15 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
       content,
       targetId,
       done,
+      time,
     }: {
       id: string;
       date: string;
       content: string;
       targetId: string;
       done: boolean;
-    }) => editTodoListItem(id, date, content, targetId, done),
+      time?: string;
+    }) => editTodoListItem(id, date, content, targetId, done, time),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
@@ -58,15 +60,32 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
     setIsEditMode(false);
   };
 
-  const handleClickConfirm = (editedText: string) => {
-    mutate({
-      id: listId,
-      date: selectedDate,
-      content: editedText,
-      targetId: id,
-      done: done,
-    });
-    setText(editedText);
+  const handleClickConfirm = ({
+    text,
+    time,
+  }: {
+    text: string;
+    time?: string;
+  }) => {
+    const req = time
+      ? {
+          id: listId,
+          date: selectedDate,
+          content: text,
+          targetId: id,
+          done: done,
+          time: time,
+        }
+      : {
+          id: listId,
+          date: selectedDate,
+          content: text,
+          targetId: id,
+          done: done,
+        };
+
+    mutate(req);
+    setText(text);
     setIsEditMode(false);
   };
 
@@ -80,6 +99,7 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
         <EditInput
           text={text}
           type={type}
+          time={time}
           handleClickDelete={handleClickDelete}
           handleClickConfirm={handleClickConfirm}
           handleClickCancel={handleClickCancel}
@@ -98,11 +118,12 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
                   done: event.target.checked,
                 })
               }
+              style={{ textDecoration: `${done ? 'line-through' : 'none'}` }}
             >
               {text}
             </Checkbox>
           ) : (
-            <Flex gap="sm">
+            <Flex gap="sm" align="center" flex={1}>
               <Tag color="magenta">{time}</Tag>
               <Typography.Paragraph style={{ margin: 0 }}>
                 {text}

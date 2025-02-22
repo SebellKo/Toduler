@@ -4,24 +4,27 @@ import DateCell from './DateCell';
 import { useDateStore } from '../../stores/dateStore';
 import { formatDate } from '../../utils/formatDate';
 import { useQuery } from '@tanstack/react-query';
-import { getAllToDos } from '../api/getAllToDos';
+import { getAllToDos } from '../../api/getAllToDos';
+import { useSort } from '../../hooks/useSort';
 
 function ScheduleCalendar() {
-  const setSelectedDate = useDateStore((state) => state.setSelectedDate);
+  const { sortContents } = useSort();
+  const { selectedDate, setSelectedDate } = useDateStore();
+  const filteredDate = selectedDate.slice(0, 7);
 
-  const { data } = useQuery({
-    queryKey: ['todos'],
-    queryFn: getAllToDos,
+  const { data: todoData } = useQuery({
+    queryKey: ['todos', filteredDate],
+    queryFn: () => getAllToDos(filteredDate),
   });
 
-  if (!data) return <></>;
+  if (!todoData) return <></>;
 
   const cellRender: CalendarProps<Dayjs>['cellRender'] = (current, info) => {
-    const scheduleData = data.map((item) => {
+    const scheduleData = todoData.map((item) => {
       return {
         id: item.data[0].id,
         date: item.date,
-        schedule: [...item.data[0].contents],
+        schedule: [...sortContents(item.data[0].contents)],
       };
     });
 
@@ -33,12 +36,11 @@ function ScheduleCalendar() {
   };
 
   return (
-    <Card style={{ flex: 8 }}>
-      <Calendar
-        cellRender={cellRender}
-        onSelect={(date) => setSelectedDate(formatDate(date))}
-      ></Calendar>
-    </Card>
+    <Calendar
+      cellRender={cellRender}
+      onSelect={(date) => setSelectedDate(formatDate(date))}
+      style={{ flex: 8 }}
+    ></Calendar>
   );
 }
 

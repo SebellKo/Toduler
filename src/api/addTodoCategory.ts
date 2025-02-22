@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import { getListStore } from '../../utils/db/getListStore';
-import { getListById } from '../../utils/db/getListById';
-import getPrimaryKey from '../../utils/db/getPrimaryKey';
+import { getListStore } from '../utils/db/getListStore';
+import { getListById } from '../utils/db/getListById';
+import getPrimaryKey from '../utils/db/getPrimaryKey';
 
 export const addTodoCategory = async (title: string, date: string) => {
   try {

@@ -5,11 +5,15 @@ import TodoListItem from './TodoListItem';
 import { useState } from 'react';
 import ListItemInput from './commons/ListItemInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import addTodoListItem from '../api/addTodoListItem';
+import addTodoListItem from '../../api/addTodoListItem';
 import dayjs from 'dayjs';
 import { useDateStore } from '../../stores/dateStore';
 
-function TodoList({ listData }: ListProps) {
+interface Props {
+  listData: ListProps;
+}
+
+function TodoList({ listData }: Props) {
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
   const [selectedTime, setSelectedTime] = useState<string>('');
   const selectedDate = useDateStore((state) => state.selectedDate);
