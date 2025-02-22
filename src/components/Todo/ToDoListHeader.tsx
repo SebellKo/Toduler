@@ -1,10 +1,10 @@
 import { DeleteOutlined, PlusCircleFilled } from '@ant-design/icons';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Flex, Typography, Button } from 'antd';
-import { editTodoTitle } from '../../api/editTodoTitle';
 import { useEffect, useState } from 'react';
-import { deleteList } from '../../api/deleteList';
+
 import { useDateStore } from '../../stores/dateStore';
+import { useDeleteCategory } from '../../hooks/useDeleteCategory';
+import { useEditCategory } from '../../hooks/useEditCategory';
 
 interface Props {
   id: string;
@@ -17,34 +17,17 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
   const [text, setText] = useState<string>(title);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
-  const queryClient = useQueryClient();
+  const { deleteListMutate } = useDeleteCategory();
+  const { editCategoryMutate } = useEditCategory();
 
   useEffect(() => {
     if (text === title && text.trim().length === 0) return;
-    mutate({
+    editCategoryMutate({
       id: id,
       date: selectedDate,
       newTitle: text.trim(),
     });
   }, [text]);
-
-  const { mutate } = useMutation({
-    mutationFn: ({
-      id,
-      date,
-      newTitle,
-    }: {
-      id: string;
-      date: string;
-      newTitle: string;
-    }) => editTodoTitle(id, date, newTitle),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
-  });
-
-  const { mutate: deleteListMutate } = useMutation({
-    mutationFn: (date: string) => deleteList(date),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
-  });
 
   return (
     <Flex flex={1} align="center" justify="space-between">

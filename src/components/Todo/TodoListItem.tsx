@@ -1,12 +1,13 @@
 import { EditOutlined } from '@ant-design/icons';
 import { Typography, Button, Checkbox, Flex, Tag } from 'antd';
-import ListItemContainer from '../../styles/components/ListItemContainer';
 import { useState } from 'react';
-import EditInput from './commons/EditInput';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import editTodoListItem from '../../api/editTodoListItem';
-import { deleteListItem } from '../../api/deleteListItem';
+
 import { useDateStore } from '../../stores/dateStore';
+import { useEditListItem } from '../../hooks/useEditListItem';
+import { useDeleteListItem } from '../../hooks/useDeleteListItem';
+
+import ListItemContainer from '../../styles/components/ListItemContainer';
+import EditInput from './commons/EditInput';
 
 interface Props {
   id: string;
@@ -21,40 +22,8 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
   const [text, setText] = useState<string>(content);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
-
-  const queryClient = useQueryClient();
-
-  const { mutate } = useMutation({
-    mutationFn: ({
-      id,
-      date,
-      content,
-      targetId,
-      done,
-      time,
-    }: {
-      id: string;
-      date: string;
-      content: string;
-      targetId: string;
-      done: boolean;
-      time?: string;
-    }) => editTodoListItem(id, date, content, targetId, done, time),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
-  });
-
-  const { mutate: deleteMutate } = useMutation({
-    mutationFn: ({
-      id,
-      date,
-      targetId,
-    }: {
-      id: string;
-      date: string;
-      targetId: string;
-    }) => deleteListItem(id, date, targetId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
-  });
+  const { editListItemMutate } = useEditListItem();
+  const { deleteListItemMutate } = useDeleteListItem();
 
   const handleClickCancel = () => {
     setIsEditMode(false);
@@ -84,13 +53,13 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
           done: done,
         };
 
-    mutate(req);
+    editListItemMutate(req);
     setText(text);
     setIsEditMode(false);
   };
 
   const handleClickDelete = () => {
-    deleteMutate({ id: listId, date: selectedDate, targetId: id });
+    deleteListItemMutate({ id: listId, date: selectedDate, targetId: id });
   };
 
   return (
@@ -110,7 +79,7 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
             <Checkbox
               checked={done}
               onChange={(event) =>
-                mutate({
+                editListItemMutate({
                   id: listId,
                   date: selectedDate,
                   content: content,
