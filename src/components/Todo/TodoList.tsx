@@ -1,13 +1,14 @@
 import { Flex, List, Divider, TimePicker } from 'antd';
-import ToDoListHeader from './ToDoListHeader';
-import { ListProps } from '../../types/listData';
-import TodoListItem from './TodoListItem';
 import { useState } from 'react';
-import ListItemInput from './commons/ListItemInput';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import addTodoListItem from '../../api/addTodoListItem';
 import dayjs from 'dayjs';
+
 import { useDateStore } from '../../stores/dateStore';
+import { useAddListItem } from '../../hooks/useAddListItem';
+
+import { ListProps } from '../../types/listData';
+import ListItemInput from './commons/ListItemInput';
+import ToDoListHeader from './ToDoListHeader';
+import TodoListItem from './TodoListItem';
 
 interface Props {
   listData: ListProps;
@@ -17,23 +18,7 @@ function TodoList({ listData }: Props) {
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
   const [selectedTime, setSelectedTime] = useState<string>('');
   const selectedDate = useDateStore((state) => state.selectedDate);
-
-  const queryClient = useQueryClient();
-
-  const { mutate } = useMutation({
-    mutationFn: ({
-      id,
-      date,
-      content,
-      time,
-    }: {
-      id: string;
-      date: string;
-      content: string;
-      time?: string;
-    }) => addTodoListItem(id, date, content, time),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
-  });
+  const { addListItemMutate } = useAddListItem();
 
   const handleClickConfirm = (content: string) => {
     setIsClickAdd(false);
@@ -46,7 +31,7 @@ function TodoList({ listData }: Props) {
             content: content,
             time: selectedTime,
           };
-    mutate(mutateObj);
+    addListItemMutate(mutateObj);
   };
   const handleClickCancel = () => {
     setIsClickAdd(false);

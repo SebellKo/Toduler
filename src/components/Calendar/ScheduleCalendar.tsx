@@ -1,21 +1,17 @@
-import { Calendar, CalendarProps, Card } from 'antd';
+import { Calendar, CalendarProps } from 'antd';
 import { Dayjs } from 'dayjs';
-import DateCell from './DateCell';
+
 import { useDateStore } from '../../stores/dateStore';
-import { formatDate } from '../../utils/formatDate';
-import { useQuery } from '@tanstack/react-query';
-import { getAllToDos } from '../../api/getAllToDos';
 import { useSort } from '../../hooks/useSort';
+import { useMonthTodos } from '../../hooks/useMonthTodos';
+import { formatDate } from '../../utils/formatDate';
+
+import DateCell from './DateCell';
 
 function ScheduleCalendar() {
   const { sortContents } = useSort();
-  const { selectedDate, setSelectedDate } = useDateStore();
-  const filteredDate = selectedDate.slice(0, 7);
-
-  const { data: todoData } = useQuery({
-    queryKey: ['todos', filteredDate],
-    queryFn: () => getAllToDos(filteredDate),
-  });
+  const setSelectedDate = useDateStore((state) => state.setSelectedDate);
+  const { todoData } = useMonthTodos();
 
   if (!todoData) return <></>;
 
