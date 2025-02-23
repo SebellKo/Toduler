@@ -1,4 +1,4 @@
-# ToDo & Calendar
+# Toduler
 달력과 ToDo 리스트를 이용한 일정, todo 관리 애플리케이션입니다.
 <br/>
 
@@ -14,7 +14,7 @@
 
 - 라이브러리 : React
 - 언어 : TypeScript
-- UI : and-design
+- UI : ant-design
 - 상태관리 : zustand, tanstack-query
 - db : indexedDB
 <br/>
@@ -48,11 +48,11 @@
 - 우측 ToDo 컴포넌트를 활용해 선택한 날짜의 Todo 리스트와 일정을 확인 할 수 있습니다.
 
 ### 일정관리
-- ToDo 컴포넌트를 활용해 선택한 날짜의 일정을 생성하고 삭제할 수 있습니다.
+- ToDo 컴포넌트를 활용해 선택한 날짜의 일정을 생성, 수정, 삭제할 수 있습니다.
 - TimePicker 컴포넌트를 사용해 일정 시간을 선택할 수 있습니다.
 
 ### ToDo 카테고리 추가
-- ToDo 컴포넌트를 활용해 새로운 카테고리를 추가, 삭제할 수 있습니다.
+- ToDo 컴포넌트를 활용해 새로운 카테고리를 추가, 수정, 삭제할 수 있습니다.
 - Schedules, ToDos 카테고리는 모든 날짜별 고정 카테고리 입니다.
 
 ### ToDo 리스트 아이템 추가
