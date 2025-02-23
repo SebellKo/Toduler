@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Toduler/static/css/main.f962db82.css",
+    "main.js": "/Toduler/static/js/main.9ebc7b7e.js",
+    "index.html": "/Toduler/index.html",
+    "main.f962db82.css.map": "/Toduler/static/css/main.f962db82.css.map",
+    "main.9ebc7b7e.js.map": "/Toduler/static/js/main.9ebc7b7e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f962db82.css",
+    "static/js/main.9ebc7b7e.js"
+  ]
+}
