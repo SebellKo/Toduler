@@ -5,7 +5,8 @@ export const useDeleteCategory = () => {
   const queryClient = useQueryClient();
 
   const { mutate: deleteListMutate } = useMutation({
-    mutationFn: (date: string) => deleteList(date),
+    mutationFn: ({ id, date }: { id: string; date: string }) =>
+      deleteList(id, date),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 

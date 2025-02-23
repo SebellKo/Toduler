@@ -53,7 +53,7 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
           type="text"
           danger
           icon={<DeleteOutlined />}
-          onMouseDown={() => deleteListMutate(selectedDate)}
+          onMouseDown={() => deleteListMutate({ id: id, date: selectedDate })}
         />
       ) : (
         <Button
