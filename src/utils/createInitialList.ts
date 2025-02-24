@@ -1,5 +1,7 @@
+import { ListData } from '../types/listData';
+
 export const createInitialList = (date: string) => {
-  const initialData = {
+  const initialData: ListData = {
     date: date,
     data: [
       {

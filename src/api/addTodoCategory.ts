@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getListStore } from '../utils/db/getListStore';
 import { getListById } from '../utils/db/getListById';
 import getPrimaryKey from '../utils/db/getPrimaryKey';
+import { createInitialList } from '../utils/createInitialList';
 
 export const addTodoCategory = async (title: string, date: string) => {
   try {
@@ -19,26 +20,9 @@ export const addTodoCategory = async (title: string, date: string) => {
     };
 
     if (!currentList) {
-      const initialData = {
-        date: date,
-        data: [
-          {
-            id: 'schedules',
-            title: 'Schedules',
-            type: 'schedule',
-            required: true,
-            contents: [],
-          },
-          {
-            id: 'todos',
-            title: 'ToDos',
-            type: 'todo',
-            required: true,
-            contents: [],
-          },
-          newCategory,
-        ],
-      };
+      const initialData = createInitialList(date);
+      initialData.data.push(newCategory);
+
       return await listStore.add(initialData);
     }
 
