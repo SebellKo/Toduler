@@ -1,4 +1,5 @@
 import { ContentData } from '../types/listData';
+import { createInitialList } from '../utils/createInitialList';
 import { getListById } from '../utils/db/getListById';
 import { getListStore } from '../utils/db/getListStore';
 
@@ -21,25 +22,7 @@ export const getTodoData = async (date: string): Promise<Res> => {
     const currentTodos = await getListById(date, nameIndex);
 
     if (!currentTodos) {
-      const initialData = {
-        date: date,
-        data: [
-          {
-            id: 'schedules',
-            title: 'Schedules',
-            type: 'schedule',
-            required: true,
-            contents: [],
-          },
-          {
-            id: 'todos',
-            title: 'ToDos',
-            type: 'todo',
-            required: true,
-            contents: [],
-          },
-        ],
-      };
+      const initialData = createInitialList(date);
       return initialData;
     }
 

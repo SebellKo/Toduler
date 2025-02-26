@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useDateStore } from '../../stores/dateStore';
 import { useDayTodos } from '../../hooks/useDayTodos';
-import { useAddCategory } from '../../hooks/useAddCategory';
+import { useCategory } from '../../hooks/useCategory';
 
 import { createInitialList } from '../../utils/createInitialList';
 import styles from '../../styles/todo.module.css';
@@ -15,7 +15,7 @@ function Todo() {
   const [isClickCreatNew, setIsClickCreateNew] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
   const { todoData } = useDayTodos();
-  const { addCategoryMutate } = useAddCategory();
+  const addCategoryMutate = useCategory((mutates) => mutates.addCategoryMutate);
 
   const handleClickConfirm = (title: string) => {
     addCategoryMutate({ title: title, date: selectedDate });

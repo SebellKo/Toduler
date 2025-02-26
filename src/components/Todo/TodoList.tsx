@@ -3,7 +3,7 @@ import { useState } from 'react';
 import dayjs from 'dayjs';
 
 import { useDateStore } from '../../stores/dateStore';
-import { useAddListItem } from '../../hooks/useAddListItem';
+import { useListItem } from '../../hooks/useListItem';
 
 import { ListProps } from '../../types/listData';
 import ListItemInput from './commons/ListItemInput';
@@ -18,7 +18,7 @@ function TodoList({ listData }: Props) {
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
   const [selectedTime, setSelectedTime] = useState<string>('');
   const selectedDate = useDateStore((state) => state.selectedDate);
-  const { addListItemMutate } = useAddListItem();
+  const addListItemMutate = useListItem((mutates) => mutates.addListItemMutate);
 
   const handleClickConfirm = (content: string) => {
     setIsClickAdd(false);

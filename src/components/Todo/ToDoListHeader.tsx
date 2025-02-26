@@ -3,8 +3,7 @@ import { Flex, Typography, Button } from 'antd';
 import { useEffect, useState } from 'react';
 
 import { useDateStore } from '../../stores/dateStore';
-import { useDeleteCategory } from '../../hooks/useDeleteCategory';
-import { useEditCategory } from '../../hooks/useEditCategory';
+import { useCategory } from '../../hooks/useCategory';
 
 interface Props {
   id: string;
@@ -17,8 +16,12 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
   const [text, setText] = useState<string>(title);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
-  const { deleteListMutate } = useDeleteCategory();
-  const { editCategoryMutate } = useEditCategory();
+  const deleteCategoryMutate = useCategory(
+    (mutates) => mutates.deleteCategoryMutate
+  );
+  const editCategoryMutate = useCategory(
+    (mutates) => mutates.editCategoryMutate
+  );
 
   useEffect(() => {
     if (text === title && text.trim().length === 0) return;
@@ -53,7 +56,9 @@ function ToDoListHeader({ id, title, isRequired, handleClick }: Props) {
           type="text"
           danger
           icon={<DeleteOutlined />}
-          onMouseDown={() => deleteListMutate({ id: id, date: selectedDate })}
+          onMouseDown={() =>
+            deleteCategoryMutate({ id: id, date: selectedDate })
+          }
         />
       ) : (
         <Button

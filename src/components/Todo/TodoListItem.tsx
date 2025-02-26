@@ -3,8 +3,7 @@ import { Typography, Button, Checkbox, Flex, Tag } from 'antd';
 import { useState } from 'react';
 
 import { useDateStore } from '../../stores/dateStore';
-import { useEditListItem } from '../../hooks/useEditListItem';
-import { useDeleteListItem } from '../../hooks/useDeleteListItem';
+import { useListItem } from '../../hooks/useListItem';
 
 import ListItemContainer from '../../styles/components/ListItemContainer';
 import EditInput from './commons/EditInput';
@@ -22,8 +21,12 @@ function TodoListItem({ id, listId, content, type, done, time }: Props) {
   const [text, setText] = useState<string>(content);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const selectedDate = useDateStore((state) => state.selectedDate);
-  const { editListItemMutate } = useEditListItem();
-  const { deleteListItemMutate } = useDeleteListItem();
+  const editListItemMutate = useListItem(
+    (mutates) => mutates.editListItemMutate
+  );
+  const deleteListItemMutate = useListItem(
+    (mutates) => mutates.deleteListItemMutate
+  );
 
   const handleClickCancel = () => {
     setIsEditMode(false);
